@@ -15,13 +15,13 @@ from database import Base
 #     content = Column(String(100))
 #     user_id = Column(Integer)
 
-# class Feedback(Base):
-#     __tablename__ = 'feedback'
+class Feedback(Base):
+    __tablename__ = 'feedback'
 
-#     id = Column(Integer, primary_key=True, index=True)
-#     mcmasterId = Column(String(50))
-#     mscId = Column(String(50))
-#     postiveFeedback = Column(Boolean)
+    id = Column(Integer, primary_key=True, index=True)
+    mcmasterId = Column(String(50))
+    mscId = Column(String(50))
+    positiveFeedback = Column(Boolean)
 
 class Item(Base):
     __tablename__ = "items"

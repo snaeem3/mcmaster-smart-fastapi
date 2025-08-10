@@ -12,8 +12,8 @@ app = FastAPI()
 models.Base.metadata.create_all(bind=database.engine)
 
 class Feedback(BaseModel):
-    mcmasterID: str
-    mscID: str | None
+    mcmasterId: str
+    mscId: str | None
     positiveFeedback: bool
 
 def get_db():
@@ -61,10 +61,16 @@ async def root():
 # def create_feedback(feedback: Feedback):
 #     return {"message": f"{feedback.mcmasterID} returned {feedback.mscID} {":)" if feedback.positiveFeedback else ":("}"}
 @app.post("/search-feedback/", status_code=status.HTTP_201_CREATED)
-async def create_feedback(feedback: Feedback, db: db_dependency):
+async def create_feedback(feedback: Feedback, db: Session = Depends(deps.get_db)):
     db_feedback = models.Feedback(**feedback.dict())
     db.add(db_feedback)
     db.commit()
+    db.refresh(db_feedback)
+    return db_feedback
+
+@app.get("/search-feedback/")
+def get_feedback(db: Session = Depends(deps.get_db)):
+    return db.query(models.Feedback).all()
 
 @app.post("/items/")
 def create_item(name: str, db: Session = Depends(deps.get_db)):
