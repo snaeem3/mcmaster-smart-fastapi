@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from pydantic import BaseModel
 from typing import Annotated
@@ -10,6 +11,14 @@ import requests
 app = FastAPI()
 # models.Base.metadata.create_all(bind=engine)
 models.Base.metadata.create_all(bind=database.engine)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class Feedback(BaseModel):
     mcmasterId: str
